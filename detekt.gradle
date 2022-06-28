@@ -1,0 +1,45 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektPlugin
+
+apply from: 'dependencies.gradle'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath deps.detektPlugin
+    }
+}
+
+apply plugin: DetektPlugin
+
+def projectSource = file(projectDir)
+def configFile = files("$rootDir/config/detekt/detekt.yml")
+def baselineFile = file("$rootDir/config/detekt/baseline.xml")
+def kotlinFiles = "**/*.kt"
+def resourceFiles = "**/resources/**"
+def buildFiles = "**/build/**"
+
+tasks.register("detektAll", Detekt) {
+    description = "Runs Detekt for all modules"
+    parallel = true
+    ignoreFailures = false
+    autoCorrect = autoFixLintErrors.toBoolean()
+    buildUponDefaultConfig = true
+    setSource(projectSource)
+    baseline.set(baselineFile)
+    config.setFrom(configFile)
+    include(kotlinFiles)
+    exclude(resourceFiles, buildFiles, *excludedDirectoriesForDetekt)
+    reports {
+        html.enabled = true
+        xml.enabled = false
+        txt.enabled = false
+    }
+}
+
+dependencies {
+    detektPlugins deps.detektFormatting
+}

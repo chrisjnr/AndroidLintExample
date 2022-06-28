@@ -1,0 +1,17 @@
+ext {
+    versions = [
+    detektVersion : '1.20.0',
+    ]
+
+    deps = [
+        detektPlugin: "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$versions.detektVersion",
+        detektFormatting: "io.gitlab.arturbosch.detekt:detekt-formatting:$versions.detektVersion"
+    ]
+    def detektVersion = "1.20.0"
+    detektPlugin = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektVersion"
+    detektFormatting = "io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion"
+
+    // List of files/directories to be excluded from the linter, this list can be expanded as per use case
+    excludedDirectoriesForDetekt = [
+    ]
+}
